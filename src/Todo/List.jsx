@@ -8,12 +8,12 @@ const List = (props) => {
         const tasks = props.tasks || [];
 
         return tasks.map((task) => {
-            let visible = (task.done == 'S') ? true : false;
+            let visible = (task.done === 'S') ? true : false;
 
             return (
                 <tr key={task.id}>
                     <td>{task.id}</td>
-                    <td className={ (task.done == 'S') ? 'marked-as-done' : '' }>{task.description}</td>
+                    <td className={ (task.done === 'S') ? 'marked-as-done' : '' }>{task.description}</td>
                     <td>
                         <button type="button" 
                                 onClick={ () => props.markAsDone(task) }

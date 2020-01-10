@@ -58,8 +58,18 @@ class TaskController
      */
     public function all()
     {
-        try {            
-            $result = $this->task->select()->orderBy('createdAt', 'DESC')->get();
+        try {  
+            $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_STRING);
+            
+            if (!empty($search)) {
+                $result = $this->task->select()
+                                    ->where('description', 'LIKE', '%' . $search . '%')
+                                    ->orderBy('createdAt', 'DESC')
+                                    ->get();
+
+            } else {
+                $result = $this->task->select()->orderBy('createdAt', 'DESC')->get();
+            }
     
             if (!$result) {
                 $this->response['error'] = 'true';

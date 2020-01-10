@@ -14,13 +14,25 @@ const Form = (props) => (
                     onChange={props.handleChange}
                 />
             </div>
+
             <div className="col-sm-12 col-lg-2 form-group">
-                <button type="button" className="btn btn-sm btn-primary mr-2"
-                    onClick={props.handleAdd}>
+                <button type="button" 
+                        className="btn btn-sm btn-primary mr-2"
+                        onClick={props.handleAdd}>
                     <i className="fa fa-save"></i>
                 </button>
-                <button type="reset" className="btn btn-sm btn-danger mr-2"><i className="fa fa-trash"></i></button>
-                <button type="search" className="btn btn-sm border mr-2"><i className="fa fa-search"></i></button>
+
+                <button type="button" 
+                        className="btn btn-sm border mr-2"
+                        onClick={ props.handleSearch }>
+                    <i className="fa fa-search"></i>
+                </button>
+
+                <button type="button" 
+                        className="btn btn-sm btn-danger mr-2"
+                        onClick={ props.handleClear }>
+                    <i className="fa fa-trash"></i>
+                </button>                
             </div>
         </div>
     </form>
