@@ -12,27 +12,33 @@ header("Access-Control-Allow-Headers: Content-Type, Accept, Access-Control-Allow
 require_once('./bootstrap.php');
 
 use Core\Classes\Route;
-use App\Controller\TarefaController;
+use App\Controller\TaskController;
 
 
 $route = new Route('/todo-app/backend');
 
 
 $route->post('/', function() {
-   $tarefa = new TarefaController();
+   $tarefa = new TaskController();
    $tarefa->create();
 });
 
 
 $route->get('/', function() {
-    $tarefa = new TarefaController();
+    $tarefa = new TaskController();
     $tarefa->all();
 });
 
 
 $route->delete('/{id}/delete', function($id) {
-    $tarefa = new TarefaController();
+    $tarefa = new TaskController();
     $tarefa->delete($id);
+});
+
+
+$route->put('/update/{id}', function($id) {
+    $tarefa = new TaskController();
+    $tarefa->update($id);
 });
 
 

@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use \Exception;
-use App\Model\Tarefa;
+use App\Model\Task;
 
-class TarefaController
+class TaskController
 {
-    /** @var Tarefa */
+    /** @var Task */
     private $task;
     
     private $response;
@@ -16,12 +16,12 @@ class TarefaController
     /**
      * __construct()
      * 
-     * Inicializa objeto Tarefa e 
+     * Inicializa objeto Task e 
      * configura response error default como false
      */
     public function __construct()
     {
-        $this->task = new Tarefa();
+        $this->task = new Task();
         $this->response = ['error' => 'false'];
     }
 
@@ -37,13 +37,16 @@ class TarefaController
             $result = $this->task->storeNew($_POST);
 
             if (!$result) {
-                $this->response['error'] = 'true';
+                throw new Exception('Erro ao cadastrar tarefa.');
             }
                 
             echo json_encode($this->response);
     
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $this->response['error'] = 'true';
+            $this->response['message'] = $e->getMessage();
+
+            echo json_encode($this->response);
         }
     }
 
@@ -67,7 +70,39 @@ class TarefaController
             echo json_encode($this->response);
     
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $this->response['error']   = 'true';
+            $this->response['message'] = $e->getMessage();
+            
+            echo json_encode($this->response);
+        }
+    }
+
+
+    /**
+     * update(int $id)
+     * 
+     * @param int $id Id do registro a ser atualizado
+     */
+    public function update(string $id)
+    {
+        try {
+            $data = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            if (is_numeric($id) && $this->task->validateTask($data)) {
+                $result = $this->task->update($data)->where('id', $id)->save();
+
+                if (!$result) {
+                    throw new Exception('Erro ao atualizar tarefa.');
+                }       
+            }
+
+            echo json_encode($this->response);
+
+        } catch (Exception $e) {
+            $this->response['error']   = 'true';
+            $this->response['message'] = $e->getMessage();
+            
+            echo json_encode($this->response);
         }
     }
 
@@ -84,13 +119,16 @@ class TarefaController
             $result = $this->task->where('id', $id)->delete();
     
             if (!$result) {
-                $this->response['error'] = 'true';
+                throw new Exception('Erro ao remover tarefa.');
             }
     
             echo json_encode($this->response);
     
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $this->response['error']   = 'true';
+            $this->response['message'] = $e->getMessage();
+            
+            echo json_encode($this->response);
         }
     }
 }

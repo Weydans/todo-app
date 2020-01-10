@@ -3,6 +3,7 @@
 namespace Core\Classes;
 
 use \PDO;
+use \Exception;
 use Core\Classes\Conn;
 
 /**
@@ -99,12 +100,9 @@ abstract class Model
     {
         $this->getInstance();
         
-        if (!empty($this->where)) {
-
-            $params  = $this->getUpdateParams($data);
-            
-            $this->command = 'UPDATE ' . $this->table . ' SET ' . $params;
-        } 
+        $params  = $this->getUpdateParams($data);
+        
+        $this->command = 'UPDATE ' . $this->table . ' SET ' . $params;
         
         return $this;
     }
@@ -240,6 +238,10 @@ abstract class Model
      */
     public function getQuery() : string
     {
+        if ($this->isUpdate() && empty($this->where)) {
+            throw new Exception('Para realizar atualizações é obrigatório chamar o método <b>where</b>');
+        }
+        
         $this->query = $this->command . $this->where . $this->orderBy;
 
         return $this->query;
@@ -298,6 +300,25 @@ abstract class Model
         $this->params = array_merge($this->params, $data);
 
         return $params;
+    }
+
+
+    /**
+     * isUpdate()
+     * 
+     * Verifica se o comando realizado é um update e 
+     * lança uma exceção caso seja e atributo where esteja vazio
+     * @return boll
+     */
+    private function isUpdate() : bool
+    {
+        $command = substr($this->command, 0, strlen('UPDATE'));
+
+        if ($command === 'UPDATE') {
+            return true;
+        } 
+
+        return false;
     }
 
 }

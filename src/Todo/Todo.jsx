@@ -12,11 +12,14 @@ export default class Todo extends Component {
 
     constructor(props) {
         super(props);
+
         this.state = {description: '', list: []};
 
-        this.handleAdd    = this.handleAdd.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleRemove = this.handleRemove.bind(this);
+        this.handleAdd           = this.handleAdd.bind(this);
+        this.handleChange        = this.handleChange.bind(this);
+        this.handleRemove        = this.handleRemove.bind(this);
+        this.handleMarkAsDone    = this.handleMarkAsDone.bind(this);
+        this.handleMarkAsPending = this.handleMarkAsPending.bind(this);
 
         this.refresh();
     }
@@ -54,10 +57,37 @@ export default class Todo extends Component {
     }
 
 
+    handleMarkAsDone(task) {
+        let formData = new FormData();
+        let data     = { ...task, done: 'S' };
+
+        for (let key in data) {
+            formData.append(key, data[key]);
+        }
+
+        axios.post(apiUrl + 'update/' + task.id, formData)
+            .then((response) => this.refresh());
+    }
+
+
+    handleMarkAsPending(task) {
+        let formData = new FormData();
+        let data     = { ...task, done: 'N' };
+
+        for (let key in data) {
+            formData.append(key, data[key]);
+        }
+
+        axios.post(apiUrl + 'update/' + task.id, formData)
+            .then((response) => this.refresh());
+    }
+
+
     render() {
         return (
             <div>
                 <Menu />
+
                 <div className="container">
                     <PageHeader name="Tarefas" small="Cadastro" />
 
@@ -70,6 +100,8 @@ export default class Todo extends Component {
                     <List 
                         tasks={this.state.list} 
                         remove={this.handleRemove}
+                        markAsDone={this.handleMarkAsDone}
+                        markAsPending={this.handleMarkAsPending}
                     />
                 </div>
             </div>
