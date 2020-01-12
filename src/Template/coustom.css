@@ -2,3 +2,7 @@
     text-decoration: line-through;
     color: #777;
 }
+
+.table-action {
+    width: 110px;
+}

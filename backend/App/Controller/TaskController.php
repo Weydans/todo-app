@@ -7,7 +7,7 @@ use App\Model\Task;
 
 class TaskController
 {
-    /** @var Task */
+    /** @var Task $task */
     private $task;
     
     private $response;

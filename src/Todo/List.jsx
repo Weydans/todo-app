@@ -45,14 +45,14 @@ const List = (props) => {
     }
 
     return (
-        <div className="row mt-5">
+        <div className="row">
             <div className="col-12">
                 <table className="table table-sm">
                     <thead>
                         <tr>
                             <th>Id</th>
                             <th>Descrição</th>
-                            <th>Ações</th>
+                            <th className="table-action">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
